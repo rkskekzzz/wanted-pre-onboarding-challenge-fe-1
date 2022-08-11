@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { useSign } from 'src/hooks/useAuth';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validationCheck } from 'src/validation/validationCheck';
+import useAuth from 'src/hooks/useAuth';
+import validationCheck from 'src/validation/validationCheck';
+import SignInForm from 'src/style/SignInForm.styled';
+import { Container } from 'src/components';
+import { TextField, Button } from '@mui/material';
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [disabled, setDisabled] = useState<boolean>(false);
-  const { isSignedIn, login, signUp } = useSign();
+  const { isSignedIn, login } = useAuth();
 
   const handleEmailChange = ({ target: { value } }) => setEmail(value);
   const handlePasswordChange = ({ target: { value } }) => setPassword(value);
@@ -18,14 +20,14 @@ const SignIn = () => {
     event.preventDefault();
     setDisabled(true);
     switch (validationCheck(email, password)) {
+      case 'Success':
+        login(email, password);
+        break;
       case 'EmailError':
         alert('Please enter a valid email');
         break;
       case 'PasswordError':
         alert('Please enter a valid password');
-        break;
-      case 'Success':
-        login(email, password);
         break;
       default:
         break;
@@ -38,25 +40,35 @@ const SignIn = () => {
   }, [isSignedIn]);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
+    <Container>
+      <SignInForm onSubmit={handleSubmit}>
+        <h1>Todos</h1>
+        <TextField
+          type="email"
           name="email"
           value={email}
           onChange={handleEmailChange}
+          id="outlined-basic"
+          label="e-mail"
+          variant="outlined"
+          fullWidth
         />
-        <input
+        <TextField
           type="password"
           name="password"
+          autoComplete="off"
           value={password}
           onChange={handlePasswordChange}
+          id="outlined-basic"
+          label="password"
+          variant="outlined"
+          fullWidth
         />
-        <button type="submit" disabled={disabled}>
+        <Button fullWidth type="submit" variant="contained" disabled={disabled}>
           Sign In
-        </button>
-      </form>
-    </div>
+        </Button>
+      </SignInForm>
+    </Container>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import useTodo from 'src/hooks/useTodo';
 import { Container } from 'src/components';
-import { TodoItem, TodoAddBox, TodoHeader } from './components';
+import { TodoItem, TodoAddBox } from './components';
 
 const Todo = () => {
   // const navigate = useNavigate();

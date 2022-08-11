@@ -6,17 +6,17 @@ import {
   Navigate,
   Outlet,
 } from 'react-router-dom';
-import { SignIn, Todo } from './pages/';
+import { SignIn, Todo } from 'src/pages';
 import './App.css';
 
 const ProtectedRoute = () => {
   if (!window.localStorage.getItem('todoAuthToken')) {
-    return <Navigate to={'/auth'} replace />;
+    return <Navigate to="/auth" replace />;
   }
   return <Outlet />;
 };
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -27,6 +27,5 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
-
+};
 export default App;
