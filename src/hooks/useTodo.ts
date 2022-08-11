@@ -2,26 +2,9 @@ import { useState } from 'react';
 import todoController from 'src/api/todoController';
 import { TodoResponse } from 'src/types/TodoResponse';
 
-const dummyTodos: TodoResponse[] = [
-  {
-    id: '1',
-    title: '안녕하세요',
-    content: '안녕하세요',
-    createdAt: '2020-01-01',
-    updatedAt: '2020-01-01',
-  },
-  {
-    id: '2',
-    title: '반갑습니다',
-    content: '반갑습니다',
-    createdAt: '2020-01-01',
-    updatedAt: '2020-01-01',
-  },
-];
-
 const useTodo = () => {
   const [todo, setTodo] = useState<TodoResponse | null>(null);
-  const [todos, setTodos] = useState<TodoResponse[]>(dummyTodos);
+  const [todos, setTodos] = useState<TodoResponse[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState(false);
 
