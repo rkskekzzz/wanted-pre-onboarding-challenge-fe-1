@@ -30,3 +30,17 @@
 - 한 페이지 내에서 새로고침 없이 데이터가 정합성을 갖추도록 구현해주세요
 
   - [ ] 수정되는 Todo의 내용이 목록에서도 실시간으로 반영되어야 합니다
+
+# 개발 과정에서 고려한 부분
+
+### Error Handling
+
+1. error class 만들어서 throw error하기
+2. error type 만들어서 return value를 판단하ㅣㄱ
+
+### emotion
+
+1. styled-component와 차이점
+2. emotion 사용하기
+
+### react-query
