@@ -9,8 +9,10 @@ const TodoForm = styled.form`
   gap: 15px;
 
   .contents {
+    width: 100%;
+
     input {
-      width: 100%;
+      padding: 0;
       border: 0px;
     }
     #title {
