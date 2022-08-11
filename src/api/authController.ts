@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { AuthResponse } from 'src/types/AuthResponse';
-import throwError from 'src/errors/throwError';
-import makeApiPath from './api';
+import authControllerAxiosInstance from './authControllerAxiosInstance';
 
 /**
  * 방법 1. 현재 구현되어 있는 방식
@@ -9,31 +7,18 @@ import makeApiPath from './api';
  */
 const authController = {
   signUp: async (email: string, password: string): Promise<AuthResponse> => {
-    const method = 'POST';
-    const url = makeApiPath('/users/create');
-    const body = { email, password };
-
-    return axios({
-      method,
-      data: body,
-      url,
-    })
-      .then((response) => response.data)
-      .catch(throwError);
+    return authControllerAxiosInstance({
+      method: 'POST',
+      data: { email, password },
+      url: '/users/create',
+    }).then((response) => response.data);
   },
-
   login: async (email: string, password: string): Promise<AuthResponse> => {
-    const method = 'POST';
-    const url = makeApiPath('/users/login');
-    const body = { email, password };
-
-    return axios({
-      method,
-      data: body,
-      url,
-    })
-      .then((response) => response.data)
-      .catch(throwError);
+    return authControllerAxiosInstance({
+      method: 'POST',
+      data: { email, password },
+      url: '/users/login',
+    }).then((response) => response.data);
   },
 };
 
