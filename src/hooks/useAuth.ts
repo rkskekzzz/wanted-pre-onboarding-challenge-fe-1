@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { authService } from 'src/api/authController';
+import authController from 'src/api/authController';
 import { AuthResponse } from 'src/types/AuthResponse';
 
-export function useSign() {
+const useAuth = () => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [signStateMessage, setSignStateMessage] = useState<string>('');
 
   const handleSignIn = ({ message, token }: AuthResponse) => {
@@ -17,14 +18,14 @@ export function useSign() {
   };
 
   const login = (email: string, password: string) => {
-    authService
+    authController
       .login(email, password)
       .then(handleSignIn)
       .catch(handleAuthError);
   };
 
   const signUp = (email: string, password: string) => {
-    authService
+    authController
       .signUp(email, password)
       .then(handleSignIn)
       .catch(handleAuthError);
@@ -40,4 +41,6 @@ export function useSign() {
     login,
     signUp,
   };
-}
+};
+
+export default useAuth;
