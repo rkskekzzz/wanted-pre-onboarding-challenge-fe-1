@@ -10,8 +10,7 @@ interface TodoItemProps {
 }
 
 const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
-  const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] =
-    useState<boolean>(true);
+  const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] = useState<number>(-1);
   const [updateTodoTitle, setUpdateTodoTitle] = useState<string>('');
   const [updateTodoContent, setUpdateTodoContent] = useState<string>('');
 
@@ -22,7 +21,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
 
   const handleEditButtonClick = (id: string) => {
     updateTodo(id, 'hi', 'hi');
-    setIsUpdateButtonTabbed(true);
+    setIsUpdateButtonTabbed(-1);
   };
 
   const handleDeleteButtonClick = (id: string) => {
@@ -31,40 +30,49 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
 
   return (
     <>
-      {todos.map((todo) => (
+      {todos.map((todo, index) => (
         <TodoForm key={todo.id} onSubmit={(e) => handleSubmit(e, todo.id)}>
           <div className="contents">
-            <input
-              id="title"
-              type="text"
-              placeholder="title"
-              value={updateTodoTitle}
-              onChange={(e) => setUpdateTodoTitle(e.target.value)}
-            />
-            <input
-              id="content"
-              type="text"
-              placeholder="content"
-              value={updateTodoContent}
-              onChange={(e) => setUpdateTodoContent(e.target.value)}
-            />
+            {isUpdateButtonTabbed === index ? (
+              <>
+                <input
+                  id="title"
+                  type="text"
+                  placeholder="title"
+                  value={updateTodoTitle}
+                  onChange={(e) => setUpdateTodoTitle(e.target.value)}
+                />
+                <input
+                  id="content"
+                  type="text"
+                  placeholder="content"
+                  value={updateTodoContent}
+                  onChange={(e) => setUpdateTodoContent(e.target.value)}
+                />
+              </>
+            ) : (
+              <>
+                <div id="title">{todo.title}</div>
+                <div id="content">{todo.content}</div>
+              </>
+            )}
           </div>
           <div className="buttons">
-            {isUpdateButtonTabbed ? (
-              <Button
-                type="submit"
-                aria-label="submit button"
-                onClick={() => setIsUpdateButtonTabbed(false)}
-              >
-                수정
-              </Button>
-            ) : (
+            {isUpdateButtonTabbed === index ? (
               <Button
                 type="button"
                 onClick={() => handleEditButtonClick(todo.id)}
                 aria-label="submit button"
               >
                 완료
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                aria-label="submit button"
+                onClick={() => setIsUpdateButtonTabbed(index)}
+              >
+                수정
               </Button>
             )}
             <Button
