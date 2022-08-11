@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import useTodo from 'src/hooks/useTodo';
-import { Container } from 'src/components';
+import { Container, Header } from 'src/components';
 import { TodoItem, TodoAddBox } from './components';
 
 const Todo = () => {
@@ -25,10 +25,17 @@ const Todo = () => {
   // }
 
   return (
-    <Container>
-      <TodoAddBox createTodo={createTodo} />
-      <TodoItem todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} />
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <TodoAddBox createTodo={createTodo} />
+        <TodoItem
+          todos={todos}
+          updateTodo={updateTodo}
+          deleteTodo={deleteTodo}
+        />
+      </Container>
+    </>
   );
 };
 
