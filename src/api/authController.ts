@@ -10,7 +10,7 @@ const authController = {
     });
   },
   login: async (email: string, password: string): Promise<AuthResponse> => {
-    return authControllerAxiosInstance({
+    return authControllerAxiosInstance<AuthResponse>({
       method: 'POST',
       data: { email, password },
       url: '/users/login',
