@@ -4,7 +4,6 @@ import { AuthResponse } from 'src/types/AuthResponse';
 
 const useAuth = () => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [signStateMessage, setSignStateMessage] = useState<string>('');
 
   const handleSignIn = ({ message, token }: AuthResponse) => {
