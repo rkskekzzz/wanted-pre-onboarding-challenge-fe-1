@@ -16,9 +16,7 @@ authControllerAxiosInnerInstance.interceptors.request.use(
 
 // TODO authResponse Error handling
 authControllerAxiosInnerInstance.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
+  (response) => response,
   (error) => {
     return Promise.reject(error);
   }
