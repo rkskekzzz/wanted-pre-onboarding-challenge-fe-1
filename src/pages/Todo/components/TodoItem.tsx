@@ -34,9 +34,13 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
     setIsUpdateButtonTabbed('');
   };
 
-  const handleDeleteButtonClick = ({ id }: TodoResponse) => {
-    deleteTodo(id);
+  const handleDeleteButtonClick = ({ id, title }: TodoResponse) => {
+    if (window.confirm(`${title} Todo를 삭제하시겠습니까?`)) deleteTodo(id);
   };
+
+  // const handleTodoItemClick = () => {
+  //   console.log('todo item clicked');
+  // };
 
   useEffect(() => {
     if (targets && targets.current.length > 0) {
