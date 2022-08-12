@@ -10,4 +10,15 @@ const SignInForm = styled.form`
   padding: 15%;
 `;
 
-export default SignInForm;
+const SignInBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+
+  h1 {
+    text-align: center;
+  }
+`;
+
+export { SignInForm, SignInBox };
