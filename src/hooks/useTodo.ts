@@ -14,7 +14,6 @@ const useTodo = () => {
         (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
       )
     );
-    setIsLoading(false);
   };
 
   const handleFetchTodo = (fetchedTodo: TodoResponse) => {
@@ -40,11 +39,13 @@ const useTodo = () => {
   };
 
   const handleTodoError = (error: Error) => {
-    alert(error.message);
+    console.log(error);
+    alert('잘못된 토큰입니다. 다시 로그인해주세요.');
     setIsError(true);
   };
 
   const getTodos = () => {
+    setIsLoading(true);
     todoController
       .getTodos()
       .then(handleFetchTodos)
