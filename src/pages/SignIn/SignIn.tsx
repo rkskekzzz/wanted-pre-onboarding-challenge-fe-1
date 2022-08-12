@@ -10,7 +10,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
   const { isSignedIn, login } = useAuth();
 
   const handleEmailChange = ({ target: { value } }) => setEmail(value);
@@ -34,6 +34,12 @@ const SignIn = () => {
     }
     setDisabled(false);
   };
+
+  useEffect(() => {
+    if (email.length > 0 && password.length > 0) {
+      setDisabled(false);
+    }
+  }, [email, password]);
 
   useEffect(() => {
     if (isSignedIn) navigate('/');
