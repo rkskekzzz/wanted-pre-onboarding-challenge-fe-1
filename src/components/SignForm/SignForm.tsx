@@ -10,15 +10,15 @@ interface SignFormProps {
 
 const SignForm = ({ submitAction, submitButtonText }: SignFormProps) => {
   const [email, setEmail] = useState<string>('');
-  const [disabled, setDisabled] = useState<boolean>(true);
   const [password, setPassword] = useState<string>('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
   const handleEmailChange = ({ target: { value } }) => setEmail(value);
   const handlePasswordChange = ({ target: { value } }) => setPassword(value);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setDisabled(true);
+    setIsButtonDisabled(true);
     switch (validationCheckWithEmailPassword(email, password)) {
       case 'Success':
         submitAction(email, password);
@@ -32,12 +32,12 @@ const SignForm = ({ submitAction, submitButtonText }: SignFormProps) => {
       default:
         break;
     }
-    setDisabled(false);
+    setIsButtonDisabled(false);
   };
 
   useEffect(() => {
     if (email.length > 0 && password.length > 0) {
-      setDisabled(false);
+      setIsButtonDisabled(false);
     }
   }, [email, password]);
 
@@ -64,7 +64,12 @@ const SignForm = ({ submitAction, submitButtonText }: SignFormProps) => {
         variant="outlined"
         fullWidth
       />
-      <Button fullWidth type="submit" variant="contained" disabled={disabled}>
+      <Button
+        fullWidth
+        type="submit"
+        variant="contained"
+        disabled={isButtonDisabled}
+      >
         {submitButtonText}
       </Button>
     </SignInForm>
