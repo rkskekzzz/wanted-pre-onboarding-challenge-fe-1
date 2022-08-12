@@ -16,14 +16,14 @@ const useAuth = () => {
     alert(error.message);
   };
 
-  const login = (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     authController
       .login(email, password)
       .then(handleSignIn)
       .catch(handleAuthError);
   };
 
-  const signUp = (email: string, password: string) => {
+  const signUp = async (email: string, password: string) => {
     authController
       .signUp(email, password)
       .then(handleSignIn)

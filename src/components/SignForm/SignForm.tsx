@@ -4,7 +4,7 @@ import { SignInForm } from 'src/style/SignInForm.styled';
 import { TextField, Button } from '@mui/material';
 
 interface SignFormProps {
-  submitAction: (email: string, password: string) => void;
+  submitAction: (email: string, password: string) => Promise<void>;
   submitButtonText: string;
 }
 
@@ -16,12 +16,12 @@ const SignForm = ({ submitAction, submitButtonText }: SignFormProps) => {
   const handleEmailChange = ({ target: { value } }) => setEmail(value);
   const handlePasswordChange = ({ target: { value } }) => setPassword(value);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsButtonDisabled(true);
     switch (validationCheckWithEmailPassword(email, password)) {
       case 'Success':
-        submitAction(email, password);
+        await submitAction(email, password);
         break;
       case 'EmailError':
         alert('Please enter a valid email');

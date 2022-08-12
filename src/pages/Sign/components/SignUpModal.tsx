@@ -18,7 +18,7 @@ const style = {
 interface SignUpModalProps {
   isShowSignUpModal: boolean;
   handleIsShowSignUpModalClose: () => void;
-  submitAction: (email: string, password: string) => void;
+  submitAction: (email: string, password: string) => Promise<void>;
 }
 
 const SignUpModal = ({
