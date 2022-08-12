@@ -26,6 +26,7 @@ const TodoForm = styled.form`
   }
 
   .buttons {
+    width: 80px;
     flex-direction: column;
   }
 `;
