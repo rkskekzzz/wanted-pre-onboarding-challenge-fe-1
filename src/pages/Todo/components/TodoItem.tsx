@@ -16,7 +16,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
   const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] = useState<string>('');
   const [updateTodoTitle, setUpdateTodoTitle] = useState<string>('');
   const [updateTodoContent, setUpdateTodoContent] = useState<string>('');
-  const targets = useRef([]);
+  const targets = useRef<{ id: string; ref: HTMLInputElement }[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
