@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { TodoResponse } from 'src/types/TodoResponse';
 import TodoForm from 'src/style/TodoForm.styled';
 import { Button } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 interface TodoItemProps {
   todos: TodoResponse[];
@@ -10,7 +13,7 @@ interface TodoItemProps {
 }
 
 const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
-  const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] = useState<number>(-1);
+  const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] = useState<string>('');
   const [updateTodoTitle, setUpdateTodoTitle] = useState<string>('');
   const [updateTodoContent, setUpdateTodoContent] = useState<string>('');
 
@@ -19,70 +22,90 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
     updateTodo(id, updateTodoTitle, updateTodoContent);
   };
 
-  const handleEditButtonClick = (id: string) => {
-    updateTodo(id, 'hi', 'hi');
-    setIsUpdateButtonTabbed(-1);
+  const handleUpdateButtonTabbed = ({ id, title, content }: TodoResponse) => {
+    setIsUpdateButtonTabbed(id);
+    setUpdateTodoTitle(title);
+    setUpdateTodoContent(content);
   };
 
-  const handleDeleteButtonClick = (id: string) => {
+  const handleEditButtonClick = ({ id }: TodoResponse) => {
+    updateTodo(id, updateTodoTitle, updateTodoContent);
+    setIsUpdateButtonTabbed('');
+  };
+
+  const handleDeleteButtonClick = ({ id }: TodoResponse) => {
     deleteTodo(id);
   };
 
+  const ButtonByIsUpdateButtonTabbed = useCallback(
+    (todo: TodoResponse) => (
+      <div className="buttons">
+        {isUpdateButtonTabbed === todo.id ? (
+          <Button
+            type="button"
+            onClick={() => handleEditButtonClick(todo)}
+            aria-label="submit button"
+          >
+            <CheckCircleOutlineIcon />
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            aria-label="submit button"
+            onClick={() => handleUpdateButtonTabbed(todo)}
+          >
+            <EditIcon />
+          </Button>
+        )}
+        <Button
+          type="button"
+          onClick={() => handleDeleteButtonClick(todo)}
+          aria-label="submit button"
+        >
+          <DeleteOutlineIcon />
+        </Button>
+      </div>
+    ),
+    [isUpdateButtonTabbed]
+  );
+
+  const ContentByIsUpdateButtonTabbed = useCallback(
+    (todo: TodoResponse) => (
+      <div className="contents">
+        {isUpdateButtonTabbed === todo.id ? (
+          <>
+            <input
+              id="title"
+              type="text"
+              placeholder="title"
+              value={updateTodoTitle}
+              onChange={(e) => setUpdateTodoTitle(e.target.value)}
+            />
+            <input
+              id="content"
+              type="text"
+              placeholder="content"
+              value={updateTodoContent}
+              onChange={(e) => setUpdateTodoContent(e.target.value)}
+            />
+          </>
+        ) : (
+          <>
+            <div id="title">{todo.title}</div>
+            <div id="content">{todo.content}</div>
+          </>
+        )}
+      </div>
+    ),
+    [isUpdateButtonTabbed, updateTodoTitle, updateTodoContent]
+  );
+
   return (
     <>
-      {todos.map((todo, index) => (
+      {todos.map((todo) => (
         <TodoForm key={todo.id} onSubmit={(e) => handleSubmit(e, todo.id)}>
-          <div className="contents">
-            {isUpdateButtonTabbed === index ? (
-              <>
-                <input
-                  id="title"
-                  type="text"
-                  placeholder="title"
-                  value={updateTodoTitle}
-                  onChange={(e) => setUpdateTodoTitle(e.target.value)}
-                />
-                <input
-                  id="content"
-                  type="text"
-                  placeholder="content"
-                  value={updateTodoContent}
-                  onChange={(e) => setUpdateTodoContent(e.target.value)}
-                />
-              </>
-            ) : (
-              <>
-                <div id="title">{todo.title}</div>
-                <div id="content">{todo.content}</div>
-              </>
-            )}
-          </div>
-          <div className="buttons">
-            {isUpdateButtonTabbed === index ? (
-              <Button
-                type="button"
-                onClick={() => handleEditButtonClick(todo.id)}
-                aria-label="submit button"
-              >
-                완료
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                aria-label="submit button"
-                onClick={() => setIsUpdateButtonTabbed(index)}
-              >
-                수정
-              </Button>
-            )}
-            <Button
-              type="button"
-              onClick={() => handleDeleteButtonClick(todo.id)}
-              aria-label="submit button"
-            >
-              삭제
-            </Button>
-          </div>
+          {ContentByIsUpdateButtonTabbed(todo)}
+          {ButtonByIsUpdateButtonTabbed(todo)}
         </TodoForm>
       ))}
     </>
