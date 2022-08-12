@@ -10,10 +10,11 @@ function passwordValidationCheck(password: string) {
   return password.length >= 8;
 }
 
-function validationCheck(email: string, password: string): Validation {
+export const validationCheckWithEmailPassword = (
+  email: string,
+  password: string
+): Validation => {
   if (!emailValidationCheck(email)) return 'EmailError';
   if (!passwordValidationCheck(password)) return 'PasswordError';
   return 'Success';
-}
-
-export default validationCheck;
+};
