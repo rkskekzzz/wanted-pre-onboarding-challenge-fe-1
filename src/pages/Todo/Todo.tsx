@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import useTodo from 'src/hooks/useTodo';
 import { Container, Header } from 'src/components';
+import { Divider } from '@mui/material';
 import { TodoItem, TodoAddBox } from './components';
 
 const Todo = () => {
@@ -29,6 +30,7 @@ const Todo = () => {
       <Header />
       <Container>
         <TodoAddBox createTodo={createTodo} />
+        <Divider />
         <TodoItem
           todos={todos}
           updateTodo={updateTodo}
