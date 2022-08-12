@@ -6,7 +6,7 @@ import { Container, SignForm } from 'src/components';
 import { Button } from '@mui/material';
 import SignUpModal from './components/SignUpModal';
 
-const SignIn = () => {
+const Sign = () => {
   const navigate = useNavigate();
   const [isShowSignUpModal, setShowSignUpModal] = useState<boolean>(false);
   const { isSignedIn, login, signUp } = useAuth();
@@ -39,4 +39,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Sign;

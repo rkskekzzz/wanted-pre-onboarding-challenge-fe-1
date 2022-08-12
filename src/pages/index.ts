@@ -1,4 +1,4 @@
-import SignIn from './SignIn/SignIn';
+import Sign from './Sign/Sign';
 import Todo from './Todo/Todo';
 
-export { SignIn, Todo };
+export { Sign, Todo };
