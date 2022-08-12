@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TodoResponse } from 'src/types/TodoResponse';
 import TodoForm from 'src/style/TodoForm.styled';
 import { Button } from '@mui/material';
@@ -16,6 +16,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
   const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] = useState<string>('');
   const [updateTodoTitle, setUpdateTodoTitle] = useState<string>('');
   const [updateTodoContent, setUpdateTodoContent] = useState<string>('');
+  const targets = useRef([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
@@ -37,6 +38,18 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
     deleteTodo(id);
   };
 
+  useEffect(() => {
+    if (targets && targets.current.length > 0) {
+      const currentTarget = targets.current.find(
+        (target) => target.id === isUpdateButtonTabbed
+      );
+      console.log(currentTarget);
+      if (currentTarget) {
+        currentTarget.ref.focus();
+      }
+    }
+  }, [isUpdateButtonTabbed]);
+
   return (
     <>
       {todos.map((todo) => (
@@ -45,6 +58,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
             {isUpdateButtonTabbed === todo.id ? (
               <>
                 <input
+                  ref={(ref) => targets.current.push({ id: todo.id, ref })}
                   id="title"
                   type="text"
                   placeholder="title"
