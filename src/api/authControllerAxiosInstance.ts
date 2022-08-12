@@ -1,11 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { axiosInstanceWrapper } from './axiosInstanceWrapper';
 
-const authControllerAxiosInstance = axios.create({
+const authControllerAxiosInnerInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  timeout: 1000,
+  timeout: parseInt(process.env.REACT_APP_API_TIMEOUT, 10),
 });
 
-authControllerAxiosInstance.interceptors.request.use(
+authControllerAxiosInnerInstance.interceptors.request.use(
   (request) => {
     request.headers.accept = 'application/json';
     return request;
@@ -13,7 +14,8 @@ authControllerAxiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-authControllerAxiosInstance.interceptors.response.use(
+// TODO authResponse Error handling
+authControllerAxiosInnerInstance.interceptors.response.use(
   (response) => {
     return response.data;
   },
@@ -21,5 +23,8 @@ authControllerAxiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const authControllerAxiosInstance = <T>(config: AxiosRequestConfig) =>
+  axiosInstanceWrapper<T>(config, authControllerAxiosInnerInstance);
 
 export default authControllerAxiosInstance;

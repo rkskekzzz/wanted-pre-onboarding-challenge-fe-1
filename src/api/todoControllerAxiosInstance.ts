@@ -1,11 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { axiosInstanceWrapper } from './axiosInstanceWrapper';
 
-const todoControllerAxiosInstance = axios.create({
+const todoControllerAxiosInnerInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  timeout: 1000,
+  timeout: parseInt(process.env.REACT_APP_API_TIMEOUT, 10),
 });
 
-todoControllerAxiosInstance.interceptors.request.use(
+todoControllerAxiosInnerInstance.interceptors.request.use(
   (request) => {
     if (localStorage.getItem('todoAuthToken')) {
       request.headers.Authorization = localStorage.getItem('todoAuthToken');
@@ -16,7 +17,8 @@ todoControllerAxiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-todoControllerAxiosInstance.interceptors.response.use(
+// TODO todoResponse Error handling
+todoControllerAxiosInnerInstance.interceptors.response.use(
   (response) => {
     return response.data;
   },
@@ -24,5 +26,8 @@ todoControllerAxiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const todoControllerAxiosInstance = <T>(config: AxiosRequestConfig) =>
+  axiosInstanceWrapper<T>(config, todoControllerAxiosInnerInstance);
 
 export default todoControllerAxiosInstance;

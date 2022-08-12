@@ -6,40 +6,40 @@ const todoController = {
     return todoControllerAxiosInstance({
       method: 'GET',
       url: '/todos',
-    }).then((response) => response.data);
+    });
   },
   getTodosById: async (id: string): Promise<TodoResponse | null> => {
-    return todoControllerAxiosInstance({
+    return todoControllerAxiosInstance<TodoResponse>({
       method: 'GET',
       url: `/todos/${id}`,
-    }).then((response) => response.data);
+    });
   },
   createTodo: async (
     title: string,
     content: string
   ): Promise<TodoResponse | null> => {
-    return todoControllerAxiosInstance({
+    return todoControllerAxiosInstance<TodoResponse>({
       method: 'POST',
       data: { title, content },
       url: '/todos',
-    }).then((response) => response.data);
+    });
   },
   updateTodo: async (
     id: string,
     title: string,
     content: string
   ): Promise<TodoResponse | null> => {
-    return todoControllerAxiosInstance({
+    return todoControllerAxiosInstance<TodoResponse>({
       method: 'PUT',
       data: { title, content },
       url: `/todos/${id}`,
-    }).then((response) => response.data);
+    });
   },
   deleteTodo: async (id: string): Promise<TodoResponse | null> => {
-    return todoControllerAxiosInstance({
+    return todoControllerAxiosInstance<TodoResponse>({
       method: 'DELETE',
       url: `/todos/${id}`,
-    }).then((response) => response.data);
+    });
   },
 };
 
