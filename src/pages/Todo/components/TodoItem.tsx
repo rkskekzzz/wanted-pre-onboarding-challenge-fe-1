@@ -43,10 +43,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
       const currentTarget = targets.current.find(
         (target) => target.id === isUpdateButtonTabbed
       );
-      console.log(currentTarget);
-      if (currentTarget) {
-        currentTarget.ref.focus();
-      }
+      if (currentTarget) currentTarget.ref.focus();
     }
   }, [isUpdateButtonTabbed]);
 
