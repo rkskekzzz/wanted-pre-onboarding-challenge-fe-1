@@ -4,7 +4,7 @@ import useAuth from 'src/hooks/useAuth';
 import { SignInBox } from 'src/style/SignInForm.styled';
 import { Container, SignForm } from 'src/components';
 import { Button } from '@mui/material';
-import SignUpModal from './components/SignUpModal';
+import { SignUpModal } from './components';
 
 const Sign = () => {
   const navigate = useNavigate();
