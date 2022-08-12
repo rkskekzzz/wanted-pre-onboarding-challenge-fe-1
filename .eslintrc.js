@@ -18,6 +18,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   ignorePatterns: ['*.js'],
   rules: {
+    'import/prefer-default-export': 'off',
     'arrow-body-style': 'off',
     'react/function-component-definition': [
       2,
