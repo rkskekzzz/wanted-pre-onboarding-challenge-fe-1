@@ -9,7 +9,11 @@ const useTodo = () => {
   const [isError, setIsError] = useState(false);
 
   const handleFetchTodos = (fetchedTodos: TodoResponse[]) => {
-    setTodos(fetchedTodos);
+    setTodos(
+      fetchedTodos.sort(
+        (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
+      )
+    );
     setIsLoading(false);
   };
 
@@ -18,7 +22,7 @@ const useTodo = () => {
   };
 
   const handleCreateTodo = (createdTodo: TodoResponse) => {
-    setTodos([...todos, createdTodo]);
+    setTodos([createdTodo, ...todos]);
   };
 
   const handleUpdateTodo = (updatedTodo: TodoResponse) => {
