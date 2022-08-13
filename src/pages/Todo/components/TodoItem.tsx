@@ -6,6 +6,11 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
+interface InputRef {
+  ref: HTMLInputElement | null;
+}
+type TodoResponseId = Pick<TodoResponse, 'id'>;
+type TargetObject = TodoResponseId & InputRef;
 interface TodoItemProps {
   todos: TodoResponse[];
   updateTodo: (id: string, title: string, content: string) => void;
@@ -13,10 +18,11 @@ interface TodoItemProps {
 }
 
 const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
-  const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] = useState<string>('');
+  const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] =
+    useState<TodoResponseId>({ id: '' });
   const [updateTodoTitle, setUpdateTodoTitle] = useState<string>('');
   const [updateTodoContent, setUpdateTodoContent] = useState<string>('');
-  const targets = useRef<{ id: string; ref: HTMLInputElement }[]>([]);
+  const targets = useRef<TargetObject[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
@@ -24,14 +30,14 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
   };
 
   const handleUpdateButtonTabbed = ({ id, title, content }: TodoResponse) => {
-    setIsUpdateButtonTabbed(id);
+    setIsUpdateButtonTabbed({ id });
     setUpdateTodoTitle(title);
     setUpdateTodoContent(content);
   };
 
   const handleEditButtonClick = ({ id }: TodoResponse) => {
     updateTodo(id, updateTodoTitle, updateTodoContent);
-    setIsUpdateButtonTabbed('');
+    setIsUpdateButtonTabbed({ id: '' });
   };
 
   const handleDeleteButtonClick = ({ id, title }: TodoResponse) => {
@@ -42,12 +48,16 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
   //   console.log('todo item clicked');
   // };
 
+  const currentTarget = (predicate: (element: TargetObject) => boolean) =>
+    targets.current.find(predicate);
+  const predicateTodo = (element: TargetObject) =>
+    element.id === isUpdateButtonTabbed.id;
+
   useEffect(() => {
-    if (targets && targets.current.length > 0) {
-      const currentTarget = targets.current.find(
-        (target) => target.id === isUpdateButtonTabbed
-      );
-      if (currentTarget) currentTarget.ref.focus();
+    const currentTargetToFocus = currentTarget(predicateTodo);
+
+    if (targets && targets.current.length > 0 && currentTargetToFocus) {
+      currentTargetToFocus.ref.focus();
     }
   }, [isUpdateButtonTabbed]);
 
@@ -56,7 +66,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
       {todos.map((todo) => (
         <TodoForm key={todo.id} onSubmit={(e) => handleSubmit(e, todo.id)}>
           <div className="contents">
-            {isUpdateButtonTabbed === todo.id ? (
+            {isUpdateButtonTabbed.id === todo.id ? (
               <>
                 <input
                   ref={(ref) => targets.current.push({ id: todo.id, ref })}
@@ -82,7 +92,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
             )}
           </div>
           <div className="buttons">
-            {isUpdateButtonTabbed === todo.id ? (
+            {isUpdateButtonTabbed.id === todo.id ? (
               <Button
                 type="button"
                 onClick={() => handleEditButtonClick(todo)}
