@@ -1,6 +1,15 @@
 # :: 원티드 프리온보딩 챌린지 프론트엔드 코스 사전과제 안내 & API
 
-# 사전과제 구현
+# Week 1-2 공부한 내용 정리
+
+- [[React] react-router를 사용한 라우팅과 window.location의 차이](https://80000coding.oopy.io/b2ba558a-187d-4945-a135-230e8a775931)
+
+- [[TypeScript] 유틸리티 타입 (Pick, Omit, Partial, Record 등)](https://80000coding.oopy.io/edb8d09e-7ef9-4de2-9cf3-3b2d61d0c3e7)
+- [[React] react-router useNavigate의 wrapper component 뜯어보기](https://80000coding.oopy.io/7e14b2e2-b0ca-482a-9592-97f1153024c5)
+- [[React/TS] useRef object배열로 관리하기 + 리팩토링(함수 관심사 분리, Utility Type)](https://80000coding.oopy.io/774fd94b-686d-4a95-aeab-b8f0a376f1c6)
+-
+
+# Week 1-1 사전과제 구현 (꾸준히 업데이트 중!)
 
 ![signinView](./asset/signinView.png)
 ![todoView](./asset/todoView.png)
