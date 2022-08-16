@@ -35,10 +35,10 @@ const useTodo = () => {
   ) => {
     await queryClient.cancelQueries('todos');
 
-    const newValue = createDummyTodo(mutateTodo);
+    const dummyTodo = createDummyTodo(mutateTodo);
     const previousTodos = queryClient.getQueryData<TodoResponse[]>(['todos']);
-    queryClient.setQueryData<TodoResponse[]>('todos', (old) =>
-      optimisticFunction(old, newValue)
+    queryClient.setQueryData<TodoResponse[]>('todos', (_previousTodos) =>
+      optimisticFunction(_previousTodos, dummyTodo)
     );
     return { previousTodos };
   };
