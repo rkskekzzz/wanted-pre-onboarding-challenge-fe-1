@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import TodoForm from 'src/style/TodoForm.styled';
+import { CreateMutateFunction } from 'src/types/Todo';
 import AddIcon from '@mui/icons-material/Add';
 
 interface TodoAddBoxProps {
-  createTodo: (title: string, content: string) => void;
+  createTodo: CreateMutateFunction;
 }
 
 const TodoAddBox = ({ createTodo }: TodoAddBoxProps) => {
@@ -13,7 +14,7 @@ const TodoAddBox = ({ createTodo }: TodoAddBoxProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTodo(newTodoTitle, newTodoContent);
+    createTodo({ title: newTodoTitle, content: newTodoContent });
     setNewTodoTitle('');
     setNewTodoContent('');
   };

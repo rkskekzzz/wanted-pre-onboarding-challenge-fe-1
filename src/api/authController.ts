@@ -1,4 +1,4 @@
-import { AuthResponse } from 'src/types/AuthResponse';
+import { AuthResponse } from 'src/types/Auth';
 import authControllerAxiosInstance from './authControllerAxiosInstance';
 
 const authController = {

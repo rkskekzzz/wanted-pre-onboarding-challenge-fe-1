@@ -1,96 +1,103 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import todoController from 'src/api/todoController';
-import { TodoResponse } from 'src/types/TodoResponse';
+import { createDummyTodo } from 'src/utils/todoDummy';
+import {
+  TodoResponse,
+  CreateTodo,
+  UpdateTodo,
+  MutateTodo,
+  RemoveTodo,
+} from 'src/types/Todo';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+
+type optimisticFunction = (
+  old: TodoResponse[],
+  value: TodoResponse
+) => TodoResponse[];
 
 const useTodo = () => {
-  const [todo, setTodo] = useState<TodoResponse | null>(null);
-  const [todos, setTodos] = useState<TodoResponse[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState(false);
+  const queryClient = useQueryClient();
+  const [sortedTodos, setSortedTodos] = useState<TodoResponse[]>([]);
+  const { data, isError, isLoading } = useQuery(
+    'todos',
+    todoController.getTodos
+  );
 
-  const handleFetchTodos = (fetchedTodos: TodoResponse[]) => {
-    setTodos(
-      fetchedTodos.sort(
-        (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
-      )
+  const create: optimisticFunction = (prev, cur) => [...prev, cur];
+  const update: optimisticFunction = (prev, cur) =>
+    prev.map((todo) => (todo.id === cur.id ? cur : todo));
+  const remove: optimisticFunction = (prev, cur) =>
+    prev.filter((todo) => todo.id !== cur.id);
+
+  const handleMutation = async (
+    mutateTodo: MutateTodo,
+    optimisticFunction: optimisticFunction
+  ) => {
+    await queryClient.cancelQueries('todos');
+
+    const newValue = createDummyTodo(mutateTodo);
+    const previousTodos = queryClient.getQueryData<TodoResponse[]>(['todos']);
+    queryClient.setQueryData<TodoResponse[]>('todos', (old) =>
+      optimisticFunction(old, newValue)
     );
+    return { previousTodos };
   };
 
-  const handleFetchTodo = (fetchedTodo: TodoResponse) => {
-    setTodo(fetchedTodo);
-  };
+  const { mutate: createTodo } = useMutation(
+    (createTodo: CreateTodo) => todoController.createTodo(createTodo),
+    {
+      onMutate: (createTodo) => handleMutation(createTodo, create),
+      onError: (_error, _newTodo, context) => {
+        queryClient.setQueryData('todos', context?.previousTodos);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries('todos');
+      },
+    }
+  );
 
-  const handleCreateTodo = (createdTodo: TodoResponse) => {
-    setTodos([createdTodo, ...todos]);
-  };
+  const { mutate: updateTodos } = useMutation(
+    (updateTodos: UpdateTodo) => todoController.updateTodos(updateTodos),
+    {
+      onMutate: (updateTodos) => handleMutation(updateTodos, update),
+      onError: (_error, _newTodo, context) => {
+        queryClient.setQueryData('todos', context?.previousTodos);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries('todos');
+      },
+    }
+  );
 
-  const handleUpdateTodo = (updatedTodo: TodoResponse) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((prevTodo) =>
-        prevTodo.id === updatedTodo.id ? updatedTodo : prevTodo
-      )
+  const { mutate: removeTodo } = useMutation(
+    (removeTodo: RemoveTodo) => todoController.removeTodo(removeTodo),
+    {
+      onMutate: (removeTodo) => handleMutation(removeTodo, remove),
+      onError: (_error, _newTodo, context) => {
+        queryClient.setQueryData('todos', context?.previousTodos);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries('todos');
+      },
+    }
+  );
+
+  const sortByUpdatedAt = (todos: TodoResponse[]) =>
+    todos.sort(
+      (a, b) => Number(new Date(b.updatedAt)) - Number(new Date(a.updatedAt))
     );
-  };
 
-  const handleDeleteTodo = (todoId: string) => {
-    setTodos((prevTodos) =>
-      prevTodos.filter((prevTodo) => prevTodo.id !== todoId)
-    );
-  };
-
-  const handleTodoError = (error: Error) => {
-    console.log(error);
-    alert('잘못된 토큰입니다. 다시 로그인해주세요.');
-    setIsError(true);
-  };
-
-  const getTodos = () => {
-    setIsLoading(true);
-    todoController
-      .getTodos()
-      .then(handleFetchTodos)
-      .catch(handleTodoError)
-      .finally(() => setIsLoading(false));
-  };
-
-  const getTodosById = (todoId: string) => {
-    todoController
-      .getTodosById(todoId)
-      .then(handleFetchTodo)
-      .catch(handleTodoError);
-  };
-
-  const createTodo = (title: string, content: string) => {
-    todoController
-      .createTodo(title, content)
-      .then(handleCreateTodo)
-      .catch(handleTodoError);
-  };
-
-  const updateTodo = (id: string, title: string, content: string) => {
-    todoController
-      .updateTodo(id, title, content)
-      .then(handleUpdateTodo)
-      .catch(handleTodoError);
-  };
-
-  const deleteTodo = (id: string) => {
-    todoController
-      .deleteTodo(id)
-      .then(() => handleDeleteTodo(id))
-      .catch(handleTodoError);
-  };
+  useEffect(() => {
+    if (data) setSortedTodos(() => sortByUpdatedAt(data));
+  }, [data]);
 
   return {
-    todo,
-    todos,
-    isLoading,
     isError,
-    getTodos,
-    getTodosById,
+    isLoading,
+    sortedTodos,
     createTodo,
-    updateTodo,
-    deleteTodo,
+    updateTodos,
+    removeTodo,
   };
 };
 export default useTodo;

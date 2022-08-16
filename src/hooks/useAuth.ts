@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import authController from 'src/api/authController';
-import { AuthResponse } from 'src/types/AuthResponse';
+import { AuthResponse } from 'src/types/Auth';
 
 const useAuth = () => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);

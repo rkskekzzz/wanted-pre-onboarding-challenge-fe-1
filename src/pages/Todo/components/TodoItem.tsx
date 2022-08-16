@@ -1,33 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TodoResponse } from 'src/types/TodoResponse';
+import {
+  TodoResponse,
+  UpdateMutateFunction,
+  RemoveMutateFunction,
+} from 'src/types/Todo';
 import TodoForm from 'src/style/TodoForm.styled';
 import { Button } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-interface InputRef {
+type InputRef = {
   ref: HTMLInputElement | null;
-}
-type TodoResponseId = Pick<TodoResponse, 'id'>;
-type TargetObject = TodoResponseId & InputRef;
+};
+type TargetObject = TodoResponse & InputRef;
 interface TodoItemProps {
   todos: TodoResponse[];
-  updateTodo: (id: string, title: string, content: string) => void;
-  deleteTodo: (id: string) => void;
+  updateTodos: UpdateMutateFunction;
+  removeTodo: RemoveMutateFunction;
 }
 
-const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
+const TodoItem = ({ todos, updateTodos, removeTodo }: TodoItemProps) => {
   const [isUpdateButtonTabbed, setIsUpdateButtonTabbed] =
-    useState<TodoResponseId>({ id: '' });
+    useState<TodoResponse>({ id: '' });
   const [updateTodoTitle, setUpdateTodoTitle] = useState<string>('');
   const [updateTodoContent, setUpdateTodoContent] = useState<string>('');
   const targets = useRef<TargetObject[]>([]);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id: string) => {
-    e.preventDefault();
-    updateTodo(id, updateTodoTitle, updateTodoContent);
-  };
 
   const handleUpdateButtonTabbed = ({ id, title, content }: TodoResponse) => {
     setIsUpdateButtonTabbed({ id });
@@ -36,24 +34,20 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
   };
 
   const handleEditButtonClick = ({ id }: TodoResponse) => {
-    updateTodo(id, updateTodoTitle, updateTodoContent);
+    updateTodos({ id, title: updateTodoTitle, content: updateTodoContent });
     setIsUpdateButtonTabbed({ id: '' });
   };
 
   const handleDeleteButtonClick = ({ id, title }: TodoResponse) => {
-    if (window.confirm(`${title} Todo를 삭제하시겠습니까?`)) deleteTodo(id);
+    if (window.confirm(`${title} Todo를 삭제하시겠습니까?`)) removeTodo({ id });
   };
-
-  // const handleTodoItemClick = () => {
-  //   console.log('todo item clicked');
-  // };
 
   const currentTarget = (predicate: (element: TargetObject) => boolean) =>
     targets.current.find(predicate);
-  const predicateTodo = (element: TargetObject) =>
-    element.id === isUpdateButtonTabbed.id;
 
   useEffect(() => {
+    const predicateTodo = (element: TargetObject) =>
+      element.id === isUpdateButtonTabbed.id;
     const currentTargetToFocus = currentTarget(predicateTodo);
 
     if (targets && targets.current.length > 0 && currentTargetToFocus) {
@@ -64,7 +58,7 @@ const TodoItem = ({ todos, updateTodo, deleteTodo }: TodoItemProps) => {
   return (
     <>
       {todos.map((todo) => (
-        <TodoForm key={todo.id} onSubmit={(e) => handleSubmit(e, todo.id)}>
+        <TodoForm key={todo.id}>
           <div className="contents">
             {isUpdateButtonTabbed.id === todo.id ? (
               <>

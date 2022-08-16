@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useTodo from 'src/hooks/useTodo';
 import { Container, Header } from 'src/components';
@@ -8,25 +8,20 @@ import { TodoItem, TodoAddBox } from './components';
 const Todo = () => {
   const navigate = useNavigate();
   const {
-    todos,
-    isLoading,
+    sortedTodos,
     isError,
-    getTodos,
+    isLoading,
     createTodo,
-    updateTodo,
-    deleteTodo,
+    updateTodos,
+    removeTodo,
   } = useTodo();
 
-  useEffect(() => {
-    getTodos();
-  }, []);
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (isError) {
       window.localStorage.removeItem('todoAuthToken');
       navigate('/auth');
     }
-  }, [isError]);
+  }, [isError, navigate]);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -38,9 +33,9 @@ const Todo = () => {
         <TodoAddBox createTodo={createTodo} />
         <Divider />
         <TodoItem
-          todos={todos}
-          updateTodo={updateTodo}
-          deleteTodo={deleteTodo}
+          todos={sortedTodos}
+          updateTodos={updateTodos}
+          removeTodo={removeTodo}
         />
       </Container>
     </>
