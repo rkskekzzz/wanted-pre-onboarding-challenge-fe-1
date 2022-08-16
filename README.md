@@ -7,7 +7,12 @@
 - [[TypeScript] 유틸리티 타입 (Pick, Omit, Partial, Record 등)](https://80000coding.oopy.io/edb8d09e-7ef9-4de2-9cf3-3b2d61d0c3e7)
 - [[React] react-router useNavigate의 wrapper component 뜯어보기](https://80000coding.oopy.io/7e14b2e2-b0ca-482a-9592-97f1153024c5)
 - [[React/TS] useRef object배열로 관리하기 + 리팩토링(함수 관심사 분리, Utility Type)](https://80000coding.oopy.io/774fd94b-686d-4a95-aeab-b8f0a376f1c6)
--
+
+- [React Query로 리팩토링하기](https://80000coding.oopy.io/b0655b92-43e8-435b-97a6-244fbf875637) - 작성중...
+
+추가로 공부한 내용
+
+- [TypeScript Type Chellenge](https://80000coding.oopy.io/a79bf2b8-6612-4258-9c13-6b20ee85e4d0) - 작성중...
 
 # Week 1-1 사전과제 구현 (꾸준히 업데이트 중!)
 
