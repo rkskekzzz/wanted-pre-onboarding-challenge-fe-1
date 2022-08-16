@@ -1,9 +1,4 @@
-import {
-  TodoResponse,
-  CreateTodo,
-  UpdateTodo,
-  RemoveTodo,
-} from 'src/types/Todo';
+import { TodoResponse, CreateTodo, UpdateTodo, RemoveTodo } from 'src/types/Todo';
 import todoControllerAxiosInstance from './todoControllerAxiosInstance';
 
 const todoController = {
@@ -19,21 +14,14 @@ const todoController = {
       url: `/todos/${id}`,
     });
   },
-  createTodo: async ({
-    title,
-    content,
-  }: CreateTodo): Promise<TodoResponse | null> => {
+  createTodo: async ({ title, content }: CreateTodo): Promise<TodoResponse | null> => {
     return todoControllerAxiosInstance<TodoResponse>({
       method: 'POST',
       data: { title, content },
       url: '/todos',
     });
   },
-  updateTodos: async ({
-    id,
-    title,
-    content,
-  }: UpdateTodo): Promise<TodoResponse | null> => {
+  updateTodos: async ({ id, title, content }: UpdateTodo): Promise<TodoResponse | null> => {
     return todoControllerAxiosInstance<TodoResponse>({
       method: 'PUT',
       data: { title, content },

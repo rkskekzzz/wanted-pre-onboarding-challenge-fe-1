@@ -1,12 +1,12 @@
 import { UseMutateFunction } from 'react-query';
+import { ObjectWithId } from './ObjectWithId';
 
-export type TodoResponse = {
+export interface TodoResponse extends ObjectWithId {
   title?: string;
   content?: string;
-  id?: string;
   createdAt?: string;
   updatedAt?: string;
-};
+}
 
 export type CreateTodo = Pick<TodoResponse, 'title' | 'content'>;
 export type UpdateTodo = Pick<TodoResponse, 'id' | 'title' | 'content'>;

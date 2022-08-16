@@ -7,14 +7,7 @@ import { TodoItem, TodoAddBox } from './components';
 
 const Todo = () => {
   const navigate = useNavigate();
-  const {
-    sortedTodos,
-    isError,
-    isLoading,
-    createTodo,
-    updateTodos,
-    removeTodo,
-  } = useTodo();
+  const { sortedTodos, isError, isLoading, createTodo, updateTodos, removeTodo } = useTodo();
 
   React.useEffect(() => {
     if (isError) {
@@ -32,11 +25,7 @@ const Todo = () => {
       <Container>
         <TodoAddBox createTodo={createTodo} />
         <Divider />
-        <TodoItem
-          todos={sortedTodos}
-          updateTodos={updateTodos}
-          removeTodo={removeTodo}
-        />
+        <TodoItem todos={sortedTodos} updateTodos={updateTodos} removeTodo={removeTodo} />
       </Container>
     </>
   );

@@ -9,8 +9,8 @@ interface TodoAddBoxProps {
 }
 
 const TodoAddBox = ({ createTodo }: TodoAddBoxProps) => {
-  const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-  const [newTodoContent, setNewTodoContent] = useState<string>('');
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [newTodoContent, setNewTodoContent] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
