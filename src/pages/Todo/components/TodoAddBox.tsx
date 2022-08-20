@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import TodoForm from 'src/style/TodoForm.styled';
+import { TodoResponse } from 'src/types/TodoResponse';
 import AddIcon from '@mui/icons-material/Add';
 
 interface TodoAddBoxProps {
-  createTodo: (title: string, content: string) => void;
+  createTodo: (todoItem: Pick<TodoResponse, 'todo'>) => void;
 }
 
 const TodoAddBox = ({ createTodo }: TodoAddBoxProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-  const [newTodoContent, setNewTodoContent] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTodo(newTodoTitle, newTodoContent);
+    createTodo({ todo: newTodoTitle });
     setNewTodoTitle('');
-    setNewTodoContent('');
   };
 
   return (
@@ -27,13 +26,6 @@ const TodoAddBox = ({ createTodo }: TodoAddBoxProps) => {
           placeholder="title"
           value={newTodoTitle}
           onChange={(e) => setNewTodoTitle(e.target.value)}
-        />
-        <input
-          id="content"
-          type="text"
-          placeholder="content"
-          value={newTodoContent}
-          onChange={(e) => setNewTodoContent(e.target.value)}
         />
       </div>
       <div className="buttons">

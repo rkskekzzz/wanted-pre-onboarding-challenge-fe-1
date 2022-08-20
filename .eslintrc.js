@@ -20,10 +20,9 @@ module.exports = {
   rules: {
     'import/prefer-default-export': 'off',
     'arrow-body-style': 'off',
-    'react/function-component-definition': [
-      2,
-      { namedComponents: 'arrow-function' },
-    ],
+    'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     'import/extensions': [

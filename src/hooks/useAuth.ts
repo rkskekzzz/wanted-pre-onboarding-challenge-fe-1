@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import authController from 'src/api/authController';
-import { AuthResponse } from 'src/types/AuthResponse';
+// import { AuthResponse } from 'src/types/AuthResponse';
 
 const useAuth = () => {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  const [signStateMessage, setSignStateMessage] = useState<string>('');
 
-  const handleSignIn = ({ message, token }: AuthResponse) => {
-    window.localStorage.setItem('todoAuthToken', token);
-    setSignStateMessage(message);
+  const handleSignIn = () => {
     setIsSignedIn(true);
   };
 
@@ -17,17 +14,11 @@ const useAuth = () => {
   };
 
   const login = async (email: string, password: string) => {
-    authController
-      .login(email, password)
-      .then(handleSignIn)
-      .catch(handleAuthError);
+    authController.login(email, password).then(handleSignIn).catch(handleAuthError);
   };
 
   const signUp = async (email: string, password: string) => {
-    authController
-      .signUp(email, password)
-      .then(handleSignIn)
-      .catch(handleAuthError);
+    authController.signUp(email, password).then(handleSignIn).catch(handleAuthError);
   };
 
   useEffect(() => {
@@ -36,7 +27,6 @@ const useAuth = () => {
 
   return {
     isSignedIn,
-    signStateMessage,
     login,
     signUp,
   };

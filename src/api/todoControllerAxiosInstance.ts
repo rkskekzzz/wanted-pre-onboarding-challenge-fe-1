@@ -8,9 +8,9 @@ const todoControllerAxiosInnerInstance = axios.create({
 
 todoControllerAxiosInnerInstance.interceptors.request.use(
   (request) => {
-    if (localStorage.getItem('todoAuthToken')) {
-      request.headers.Authorization = localStorage.getItem('todoAuthToken');
-      request.headers.accept = 'application/json';
+    const token = localStorage.getItem('todoAuthToken');
+    if (token) {
+      request.headers.Authorization = `Bearer ${token}`;
     }
     return request;
   },
@@ -20,7 +20,7 @@ todoControllerAxiosInnerInstance.interceptors.request.use(
 // TODO todoResponse Error handling
 todoControllerAxiosInnerInstance.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   (error) => {
     return Promise.reject(error);

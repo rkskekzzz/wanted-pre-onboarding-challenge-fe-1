@@ -64,12 +64,7 @@ const SignForm = ({ submitAction, submitButtonText }: SignFormProps) => {
         variant="outlined"
         fullWidth
       />
-      <Button
-        fullWidth
-        type="submit"
-        variant="contained"
-        disabled={isButtonDisabled}
-      >
+      <Button fullWidth type="submit" variant="contained" disabled={isButtonDisabled}>
         {submitButtonText}
       </Button>
     </SignInForm>

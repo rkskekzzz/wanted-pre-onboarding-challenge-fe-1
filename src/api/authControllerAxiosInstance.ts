@@ -16,7 +16,10 @@ authControllerAxiosInnerInstance.interceptors.request.use(
 
 // TODO authResponse Error handling
 authControllerAxiosInnerInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    localStorage.setItem('todoAuthToken', response.data.access_token);
+    return response;
+  },
   (error) => {
     return Promise.reject(error);
   }

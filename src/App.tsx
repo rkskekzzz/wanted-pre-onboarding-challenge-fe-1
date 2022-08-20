@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from 'react-router-dom';
-import { Sign, Todo } from 'src/pages';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Sign, Todo, PageNotFound } from 'src/pages';
 import './App.css';
 
 const ProtectedRoute = () => {
@@ -24,6 +18,7 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Todo />} />
         </Route>
+        <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

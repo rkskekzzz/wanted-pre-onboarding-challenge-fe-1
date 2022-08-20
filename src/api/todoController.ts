@@ -2,43 +2,36 @@ import { TodoResponse } from 'src/types/TodoResponse';
 import todoControllerAxiosInstance from './todoControllerAxiosInstance';
 
 const todoController = {
-  getTodos: async (): Promise<TodoResponse[] | null> => {
-    return todoControllerAxiosInstance({
+  getTodos: (): Promise<TodoResponse[] | null> => {
+    return todoControllerAxiosInstance<TodoResponse[]>({
       method: 'GET',
       url: '/todos',
     });
   },
-  getTodosById: async (id: string): Promise<TodoResponse | null> => {
+  getTodosById: (todoItem: Pick<TodoResponse, 'id'>): Promise<TodoResponse | null> => {
     return todoControllerAxiosInstance<TodoResponse>({
       method: 'GET',
-      url: `/todos/${id}`,
+      url: `/todos/${todoItem.id}`,
     });
   },
-  createTodo: async (
-    title: string,
-    content: string
-  ): Promise<TodoResponse | null> => {
+  createTodo: (todoItem: Pick<TodoResponse, 'todo'>): Promise<TodoResponse | null> => {
     return todoControllerAxiosInstance<TodoResponse>({
       method: 'POST',
-      data: { title, content },
+      data: todoItem,
       url: '/todos',
     });
   },
-  updateTodo: async (
-    id: string,
-    title: string,
-    content: string
-  ): Promise<TodoResponse | null> => {
+  updateTodo: (todoItem: Pick<TodoResponse, 'id' | 'todo' | 'isCompleted'>): Promise<TodoResponse | null> => {
     return todoControllerAxiosInstance<TodoResponse>({
       method: 'PUT',
-      data: { title, content },
-      url: `/todos/${id}`,
+      data: { todo: todoItem.todo, isCompleted: todoItem.isCompleted },
+      url: `/todos/${todoItem.id}`,
     });
   },
-  deleteTodo: async (id: string): Promise<TodoResponse | null> => {
+  deleteTodo: (todoItem: Pick<TodoResponse, 'id'>): Promise<TodoResponse | null> => {
     return todoControllerAxiosInstance<TodoResponse>({
       method: 'DELETE',
-      url: `/todos/${id}`,
+      url: `/todos/${todoItem.id}`,
     });
   },
 };

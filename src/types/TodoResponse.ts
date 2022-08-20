@@ -1,7 +1,6 @@
 export type TodoResponse = {
-  title: string;
-  content: string;
-  id: string;
-  createdAt: string;
-  updatedAt: string;
+  id: number;
+  todo: string;
+  isCompleted: boolean;
+  userId: number;
 };

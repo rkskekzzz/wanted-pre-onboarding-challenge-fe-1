@@ -2,18 +2,18 @@ import { AuthResponse } from 'src/types/AuthResponse';
 import authControllerAxiosInstance from './authControllerAxiosInstance';
 
 const authController = {
-  signUp: async (email: string, password: string): Promise<AuthResponse> => {
+  signUp: (email: string, password: string): Promise<AuthResponse> => {
     return authControllerAxiosInstance<AuthResponse>({
       method: 'POST',
       data: { email, password },
-      url: '/users/create',
+      url: '/auth/signup',
     });
   },
-  login: async (email: string, password: string): Promise<AuthResponse> => {
+  login: (email: string, password: string): Promise<AuthResponse> => {
     return authControllerAxiosInstance<AuthResponse>({
       method: 'POST',
       data: { email, password },
-      url: '/users/login',
+      url: '/auth/signin',
     });
   },
 };

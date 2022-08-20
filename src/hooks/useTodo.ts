@@ -9,38 +9,14 @@ const useTodo = () => {
   const [isError, setIsError] = useState(false);
 
   const handleFetchTodos = (fetchedTodos: TodoResponse[]) => {
-    setTodos(
-      fetchedTodos.sort(
-        (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
-      )
-    );
+    setTodos(fetchedTodos);
   };
 
   const handleFetchTodo = (fetchedTodo: TodoResponse) => {
     setTodo(fetchedTodo);
   };
 
-  const handleCreateTodo = (createdTodo: TodoResponse) => {
-    setTodos([createdTodo, ...todos]);
-  };
-
-  const handleUpdateTodo = (updatedTodo: TodoResponse) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((prevTodo) =>
-        prevTodo.id === updatedTodo.id ? updatedTodo : prevTodo
-      )
-    );
-  };
-
-  const handleDeleteTodo = (todoId: string) => {
-    setTodos((prevTodos) =>
-      prevTodos.filter((prevTodo) => prevTodo.id !== todoId)
-    );
-  };
-
-  const handleTodoError = (error: Error) => {
-    console.log(error);
-    alert('잘못된 토큰입니다. 다시 로그인해주세요.');
+  const handleTodoError = () => {
     setIsError(true);
   };
 
@@ -53,32 +29,20 @@ const useTodo = () => {
       .finally(() => setIsLoading(false));
   };
 
-  const getTodosById = (todoId: string) => {
-    todoController
-      .getTodosById(todoId)
-      .then(handleFetchTodo)
-      .catch(handleTodoError);
+  const getTodosById = ({ id }: TodoResponse) => {
+    todoController.getTodosById({ id }).then(handleFetchTodo).catch(handleTodoError);
   };
 
-  const createTodo = (title: string, content: string) => {
-    todoController
-      .createTodo(title, content)
-      .then(handleCreateTodo)
-      .catch(handleTodoError);
+  const createTodo = (todoItem: Pick<TodoResponse, 'todo'>) => {
+    todoController.createTodo(todoItem).then(getTodos).catch(handleTodoError);
   };
 
-  const updateTodo = (id: string, title: string, content: string) => {
-    todoController
-      .updateTodo(id, title, content)
-      .then(handleUpdateTodo)
-      .catch(handleTodoError);
+  const updateTodo = (todoItem: Pick<TodoResponse, 'id' | 'todo' | 'isCompleted'>) => {
+    todoController.updateTodo(todoItem).then(getTodos).catch(handleTodoError);
   };
 
-  const deleteTodo = (id: string) => {
-    todoController
-      .deleteTodo(id)
-      .then(() => handleDeleteTodo(id))
-      .catch(handleTodoError);
+  const deleteTodo = (todoItem: Pick<TodoResponse, 'id'>) => {
+    todoController.deleteTodo(todoItem).then(getTodos).catch(handleTodoError);
   };
 
   return {
