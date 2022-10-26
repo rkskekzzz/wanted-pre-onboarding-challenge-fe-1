@@ -38,6 +38,8 @@ const SignForm = ({ submitAction, submitButtonText }: SignFormProps) => {
   useEffect(() => {
     if (email.length > 0 && password.length > 0) {
       setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
     }
   }, [email, password]);
 
